@@ -208,7 +208,7 @@ const setHtmlById = (elemId, text) => {{
 
 
 def make_html(fp, plan: Plan):
-    with open("template.html", encoding="utf-8") as template_file:
+    with open("assets/template.html", encoding="utf-8") as template_file:
         template_str = template_file.read()
     template = ENVIRONMENT.from_string(template_str)
 

@@ -160,3 +160,9 @@ node_modules
 
 # Private
 __*.*
+
+# Generated HTML
+chart.html
+
+# Dist
+v*/

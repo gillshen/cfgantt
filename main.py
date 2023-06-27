@@ -110,7 +110,7 @@ class MainWindow(QMainWindow):
 
     def _gantt(self):
         text = self.editor.toPlainText()
-        filepath = "__chart.html"
+        filepath = "chart.html"
         try:
             with open(filepath, mode="w", encoding="utf-8") as f:
                 make_html(f, plan=parse(text))
