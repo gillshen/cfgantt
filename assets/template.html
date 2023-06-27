@@ -39,16 +39,16 @@
     <div id="gantt-container">
       <svg id="gantt"></svg>
     </div>
+    <script>
+      const ganttChart = new Gantt(
+        "#gantt", /* plan.tasks */,
+        {
+          bar_height: 28,
+          padding: 12,
+          view_modes: ["Day", "Week", "Month"],
+          view_mode: "Month",
+        }
+      );
+    </script>
   </body>
-  <script>
-    const ganttChart = new Gantt(
-      "#gantt", /* plan.tasks */,
-      {
-        bar_height: 28,
-        padding: 12,
-        view_modes: ["Day", "Week", "Month"],
-        view_mode: "Month",
-      }
-    );
-  </script>
 </html>
