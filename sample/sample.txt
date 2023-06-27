@@ -1,5 +1,7 @@
 title: 申请季时间规划表
+state label: 现有硬性条件
 state: GPA：3.87，GRE：317
+goals label: 申请季目标
 goals: Top 20 院校 Data Science/Statistics 专业，GPA 维持，争取3.9+，GRE 325+
 
 task: 备考GRE，6月底考试，目标325+

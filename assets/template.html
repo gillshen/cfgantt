@@ -13,26 +13,42 @@
     <title>Gantt</title>
   </head>
   <body>
-    <h1 id="title"></h1>
+    {% if plan.title or plan.state or plan.goals %}
+    <h1 id="title">/* plan.title */</h1>
 
+    {% if plan.state or plan.goals %}
     <div id="caption-table">
       <table>
+        {% if plan.state %}
         <tr>
-          <td class="row-header">现有硬性条件</td>
-          <td id="state"></td>
+          <td class="row-header">/* plan.state_label */</td>
+          <td id="state">/* plan.state */</td>
         </tr>
+        {% endif %} {% if plan.goals %}
         <tr>
-          <td class="row-header">申请季目标</td>
-          <td id="goals"></td>
+          <td class="row-header">/* plan.goals_label */</td>
+          <td id="goals">/* plan.goals */</td>
         </tr>
+        {% endif %}
       </table>
     </div>
+    {% endif %} {% else %}
+    <div id="filler"></div>
+    {% endif %}
 
-    <div class="gantt-container">
+    <div id="gantt-container">
       <svg id="gantt"></svg>
     </div>
   </body>
   <script>
-    /* js */
+    const ganttChart = new Gantt(
+      "#gantt", /* plan.tasks */,
+      {
+        bar_height: 28,
+        padding: 12,
+        view_modes: ["Day", "Week", "Month"],
+        view_mode: "Month",
+      }
+    );
   </script>
 </html>

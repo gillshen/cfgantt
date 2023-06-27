@@ -11,6 +11,7 @@
   width: 80vw;
   height: 78vh;
   margin: 0 auto;
+  margin-top: 1.2rem;
 }
 
 .student .bar {
@@ -52,7 +53,6 @@
 
 #caption-table table {
   text-align: left;
-  padding-bottom: 1.2rem;
 
   /* inter-cell space */
   border-collapse: separate;
@@ -66,5 +66,9 @@
 
 #caption-table table .row-header {
   font-weight: 700;
-  text-align: right;
+  text-align: left;
+}
+
+#filler {
+  height: 6vh;
 }

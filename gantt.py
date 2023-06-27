@@ -37,6 +37,8 @@ class Plan:
     state: str = ""
     goals: str = ""
     tasks: list[Task] = dataclasses.field(default_factory=list)
+    state_label: str = "现有硬性条件"
+    goals_label: str = "申请季目标"
 
     def stringfy(self) -> "Plan":
         tasks = map(dataclasses.asdict, self.tasks)
@@ -51,6 +53,8 @@ def _compile(keyword):
 TITLE = _compile("title")
 STATE = _compile("state")
 GOALS = _compile("goals")
+STATE_LABEL = _compile(r"state\s*label")
+GOALS_LABEL = _compile(r"goals\s*label")
 
 TASK = _compile("task")
 DATE = _compile("date")
@@ -81,6 +85,10 @@ def parse(text: str) -> Plan:
             plan.state = state
         elif goals := _extract(GOALS, line):
             plan.goals = goals
+        elif state_label := _extract(STATE_LABEL, line):
+            plan.state_label = state_label
+        elif goals_label := _extract(GOALS_LABEL, line):
+            plan.goals_label = goals_label
 
         elif task_name := _extract(TASK, line):
             if data is not None:
@@ -111,12 +119,6 @@ def parse(text: str) -> Plan:
     if data is not None:
         plan.tasks.append(_create_task(data))
 
-    if not plan.title:
-        raise MissingDataError("Need a nonempty title")
-    if not plan.state:
-        raise MissingDataError("Need a nonempty state")
-    if not plan.goals:
-        raise MissingDataError("Need nonempty goals")
     if not plan.tasks:
         raise MissingDataError("No tasks to plot")
 
@@ -177,35 +179,6 @@ ENVIRONMENT = jinja2.Environment(
     keep_trailing_newline=True,
 )
 
-JS_TEMPLATE = """\
-const title = {plan.title!r};
-
-const state = {plan.state!r};
-
-const goals = {plan.goals!r};
-
-const tasks = {plan.tasks};
-
-const ganttChart = new Gantt("#gantt", tasks, {{
-  bar_height: 28,
-  padding: 12,
-  view_modes: ["Day", "Week", "Month"],
-  view_mode: "Month",
-}});
-
-window.onload = () => {{
-  setHtmlById("title", title);
-  setHtmlById("state", state);
-  setHtmlById("goals", goals);
-}};
-
-const setHtmlById = (elemId, text) => {{
-  const elem = document.getElementById(elemId);
-  const textNode = document.createTextNode(text);
-  elem.appendChild(textNode);
-}};
-"""
-
 
 def make_html(fp, plan: Plan):
     with open("assets/template.html", encoding="utf-8") as template_file:
@@ -221,9 +194,9 @@ def make_html(fp, plan: Plan):
     with open("assets/chart.css", encoding="utf-8") as css_file:
         css = css_file.read()
 
-    js = JS_TEMPLATE.format(plan=plan.stringfy())
-
-    html = template.render(frappe_js=frappe_js, frappe_css=frappe_css, js=js, css=css)
+    html = template.render(
+        frappe_js=frappe_js, frappe_css=frappe_css, css=css, plan=plan.stringfy()
+    )
     fp.write(html)
 
 
