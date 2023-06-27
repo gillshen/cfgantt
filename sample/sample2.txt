@@ -1,0 +1,183 @@
+title: 时间规划表
+state label: 计划时间
+state: YYYY-MM
+goals label: 申请目标
+goals: XXXXXX
+
+task: GPA是重中之重需要守住
+date: 2023-04 2024-01
+class: s
+progress: 30
+
+task: 夏校
+date: 2023-07 2023-08
+class: s
+progress: 10
+
+task: SAT备考，目标1500+
+date: 2023-08 2023-10
+class: s
+
+task: 托福备考，目标110+
+date: 2023-11
+class: s
+
+task: 了解院校/参加招生说明会
+date: 2023-04 2023-05
+class: s
+progress: 100
+
+task: 填写选校需求调查问卷
+id: 选校
+date: 2023-07 2023-08
+class: s
+
+task: 确定申请策略和选校范围
+date: 2023-08 2023-09
+dependencies: 选校
+class: g
+
+task: 确定目标学校
+date: 2023-08 2023-12
+dependencies: 选校
+class: g
+
+task: 填写文书素材表
+id: 文书素材
+date: 2023-04
+class: s
+progress: 100
+
+task: 头脑风暴
+id: 头脑风暴
+date: 2023-04 2023-05
+progress: 100
+dependencies: 文书素材
+class: w
+
+task: 完成UC四篇文书
+date: 2023-06 2023-07
+progress: 40
+class: s
+dependencies: 头脑风暴
+
+task: 完成CommonApp PS
+date: 2023-06 2023-08
+class: s
+dependencies: 头脑风暴
+
+task: 完成活动列表
+date: 2023-07 2023-08
+class: s
+
+task: 完成补充文书
+date: 2023-09 2023-12
+dependencies: 头脑风暴
+class: s
+
+task: 评估学生面试能力
+id: 评估学生面试能力
+date: 2023-07
+class: w
+
+task: 面试辅导
+date: 2023-07 2023-09
+class: w
+dependencies: 评估学生面试能力
+
+task: 预约校方/第三方面试
+date: 2023-09 2023-12
+class: s
+
+task: 完成学校要求的面试
+date: 2023-12 2024-02
+class: s
+
+task: 与老师沟通推荐信
+date: 2023-04
+class: s
+
+task: 收集申请所需材料
+date: 2023-04 2023-09
+class: w
+
+task: 网申填写
+id: 网申填写
+date: 2023-08 2023-12
+class: s
+
+task：跟进申请材料递交情况
+date: 2023-11 2024-02
+dependencies: 网申填写
+class: w
+
+task: 跟进ED录取结果
+id: 跟进ED录取结果
+date: 2023-12 2024-01
+class: w
+dependencies: 网申填写
+
+task: 如ED不中，跟进RD结果
+id: 跟进RD录取结果
+date: 2024-03
+class: w
+dependencies: 跟进ED录取结果
+
+task: 确定ED入读，交订金
+id: ED入读
+date: 2023-12
+class: s
+dependencies: 跟进ED录取结果
+
+task: 确定RD入读院校，交订金
+id: RD入读
+date: 2024-03 2024-04
+class: s
+dependencies: 跟进RD录取结果
+
+task: 确认入读
+id: 确认入读
+date: 2024-04-15
+class: s
+dependencies: ED入读, RD入读
+
+task: 根据学校要求发送毕业成绩单
+date: 2024-06 2024-08
+class: s
+dependencies: 确认入读
+
+task: 预定宿舍
+date: 2024-05
+class: s
+dependencies: 确认入读
+
+task: 根据学校指引完成I20申请及签证事项
+date: 2024-05 2024-06
+class: s
+dependencies: 确认入读
+
+task: 完成学生账号及邮箱注册
+date: 2024-06 2024-08
+class: s
+dependencies: 确认入读
+
+task: 完成入学测试和选课
+date: 2024-07 2024-08
+class: s
+dependencies: 确认入读
+
+task: 完成体检和疫苗
+date: 2024-08
+class: s
+dependencies: 确认入读
+
+task: 缴纳学费
+date: 2024-08
+class: s
+dependencies: 确认入读
+
+task: 根据学校要求完成其他事项
+date: 2024-06 2024-08
+class: s
+dependencies: 确认入读
+

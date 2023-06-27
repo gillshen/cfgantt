@@ -58,7 +58,7 @@ GOALS_LABEL = _compile(r"goals\s*label")
 
 TASK = _compile("task")
 DATE = _compile("date")
-WHO = _compile("who")
+CLASS = _compile("class")
 ID = _compile("id")
 PROGRESS = _compile("progress")
 DEPENDENCIES = _compile("dependencies")
@@ -103,8 +103,8 @@ def parse(text: str) -> Plan:
             data["start"] = _parse_date(start)
             data["end"] = _parse_date(end, end=True)
 
-        elif who := _extract(WHO, line):
-            data["custom_class"] = _to_custom_class(who)
+        elif task_class := _extract(CLASS, line):
+            data["custom_class"] = _to_custom_class(task_class)
         elif task_id := _extract(ID, line):
             data["id"] = task_id
 
