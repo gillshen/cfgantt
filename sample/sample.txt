@@ -1,0 +1,123 @@
+title: 申请季时间规划表
+state: GPA：3.87，GRE：317
+goals: Top 20 院校 Data Science/Statistics 专业，GPA 维持，争取3.9+，GRE 325+
+
+task: 备考GRE，6月底考试，目标325+
+id: gre
+date: 2023-06
+who: s
+progress: 80
+
+task: 备考GRE，若6月底考到325+则取消
+id: s2
+date: 2023-07 2023-08
+who: s
+dependencies: gre
+
+task: 保持并争取提高GPA
+id: s3
+date: 2023-09 2024-05
+who: s
+
+task: 暑期实习及科研
+id: summer
+date: 2023-06 2023-08
+who: s
+progress: 30
+
+task: 视经历决定是否继续校内活动，建议将重心放在申请工作
+date: 2023-10 2024-01
+who: s
+dependencies: summer
+
+task: 根据暑假活动，确认申请季简历
+id: cv
+date: 2023-08
+who: w
+dependencies: summer
+
+task: 完成《申请战略报告》，帮助学生了解申请优劣势
+date: 2023-09
+who: w
+dependencies: cv
+
+task: 9月初完善网申信息，注册申请邮箱
+date: 2023-09
+who: s
+
+task: 准备选校表
+id: 选校表
+date: 2023-06
+who: g
+progress: 100
+
+task: 填写选校需求表
+id: 选校表 complete
+date: 2023-06
+who: s
+progress: 100
+dependencies: 选校表
+
+task: 带领学生了解目标项目，签订《定校协议书》（可先确定部分选校，后期还能增加）
+id: 了解项目
+date: 2023-07
+who: g
+dependencies: 选校表 complete
+progress: 20
+
+task: 继续带领学生了解目标项目，8月底与学生确认全部定校
+date: 2023-08
+who: g
+dependencies: 了解项目
+
+task: 全程了解学生申请进度，解决相关问题
+date: 2023-09 2024-02
+who: g
+
+task: 如收到offer或拒信，与学生讨论是否接受offer或调整申请院校
+date: 2024-01 2024-03
+who: g
+
+task: 文书流程讲解及答疑
+date: 2023-06
+who: w
+progress: 100
+
+task: 沟通学术推荐人人选
+date: 2023-06
+who: w
+progress: 100
+
+task: 批注文书素材表
+id: 批注文书素材表
+date: 2023-06
+who: w
+progress: 100
+
+task: 根据批注补充文书素材表
+date: 2023-07
+who: s
+dependencies: 批注文书素材表
+
+task: 计划7月底进行头脑风暴，确定1-2个专业主文书思路
+id: 头脑风暴
+date: 2023-07
+who: w
+dependencies: 批注文书素材表
+
+task: 指导学生写作主文书并修改
+id: 主文书
+date: 2023-08
+who: w
+dependencies: 头脑风暴
+
+task: 基本定稿1-2个专业主文书
+id: 主文书1
+date: 2023-09
+who: w
+dependencies: 主文书
+
+task: 基本定稿2个专业主文书
+date: 2023-10
+who: w
+dependencies: 主文书1

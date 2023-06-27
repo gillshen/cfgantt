@@ -1,0 +1,70 @@
+:root {
+  --student-todo: #81c784;
+  --student-done: #4caf50;
+  --guwen-todo: #7986cb;
+  --guwen-done: #3f51b5;
+  --wenan-todo: #f48fb1;
+  --wenan-done: #e91e63;
+}
+
+.gantt-container {
+  width: 80vw;
+  height: 78vh;
+  margin: 0 auto;
+}
+
+.student .bar {
+  fill: var(--student-todo) !important;
+}
+.student .bar-progress {
+  fill: var(--student-done) !important;
+}
+
+.guwen .bar {
+  fill: var(--guwen-todo) !important;
+}
+.guwen .bar-progress {
+  fill: var(--guwen-done) !important;
+}
+
+.wenan .bar {
+  fill: var(--wenan-todo) !important;
+}
+.wenan .bar-progress {
+  fill: var(--wenan-done) !important;
+}
+
+#title,
+#caption-table {
+  font-family: serif;
+}
+
+#title {
+  font-size: x-large;
+  font-weight: 700;
+  text-align: center;
+}
+
+#caption-table {
+  margin: auto;
+  text-align: center;
+}
+
+#caption-table table {
+  text-align: left;
+  padding-bottom: 1.2rem;
+
+  /* inter-cell space */
+  border-collapse: separate;
+  border-spacing: 1rem 0.4rem;
+
+  /* center the table within its parent */
+  position: relative;
+  left: 50%;
+  transform: translate(-50%);
+}
+
+#caption-table table .row-header {
+  font-weight: 700;
+  text-align: right;
+}
