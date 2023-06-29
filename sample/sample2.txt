@@ -4,7 +4,7 @@ state: YYYY-MM
 goals label: 申请目标
 goals: XXXXXX
 
-define class: s pink red
+define class: s yellowgreen darkolive
 define class: w #42a7f5 #085996
 define class: g #bbb #666
 

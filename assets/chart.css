@@ -35,6 +35,19 @@
   fill: var(--wenan-done) !important;
 }
 
+#logo {
+  position: absolute;
+  left: 1rem;
+  top: 0rem;
+  max-width: 10rem;
+  max-height: 10rem;
+}
+
+#logo svg {
+  max-height: 100%;
+  max-width: 100%;
+}
+
 #title,
 #caption-table {
   font-family: serif;

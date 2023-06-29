@@ -13,7 +13,9 @@
     <title>Gantt</title>
   </head>
   <body>
-    {% if plan.title or plan.state or plan.goals %}
+    {% if logo %}
+    <div id="logo">/* logo */</div>
+    {% endif %} {% if plan.title or plan.state or plan.goals %}
     <h1 id="title">/* plan.title */</h1>
 
     {% if plan.state or plan.goals %}

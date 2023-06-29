@@ -166,3 +166,6 @@ chart.html
 
 # Dist
 v*/
+
+# SVG for testing
+*.svg

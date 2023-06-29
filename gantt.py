@@ -2,6 +2,7 @@ import re
 import datetime
 import json
 import dataclasses
+import os
 
 import jinja2
 
@@ -105,7 +106,7 @@ def parse(text: str) -> tuple[Plan, list]:
                 raise ParserError(f"No colors defined for class {class_name!r}")
             elif len(colors) > 2:
                 raise ParserError(f"Too many colors defined for class {class_name!r}")
-            class_styles.append((class_name, colors))
+            class_styles.append((class_name.lower(), colors))
 
         elif task_name := _extract(TASK, line):
             if data is not None:
@@ -123,7 +124,7 @@ def parse(text: str) -> tuple[Plan, list]:
         elif task_class := _extract(CLASS, line):
             if re.search(r"\s", task_class):
                 raise ParserError(f"Invalid class name: {task_class!r}")
-            data["custom_class"] = task_class
+            data["custom_class"] = task_class.lower()
         elif task_id := _extract(ID, line):
             data["id"] = task_id
 
@@ -220,8 +221,18 @@ def make_html(fp, plan: Plan, class_styles: list = None):
             f"}}\n"
         )
 
+    if os.path.isfile("logo.svg"):
+        with open("logo.svg") as svg_file:
+            logo = svg_file.read()
+    else:
+        logo = ""
+
     html = template.render(
-        frappe_js=frappe_js, frappe_css=frappe_css, css=css, plan=plan.stringfy()
+        frappe_js=frappe_js,
+        frappe_css=frappe_css,
+        css=css,
+        plan=plan.stringfy(),
+        logo=logo,
     )
     fp.write(html)
 
