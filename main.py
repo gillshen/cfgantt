@@ -1,5 +1,6 @@
 import sys
 import os
+import webbrowser
 
 from PyQt6.QtWidgets import (
     QApplication,
@@ -63,6 +64,27 @@ class MainWindow(QMainWindow):
         self._gantt_action.setShortcut("Ctrl+Return")
         self.addAction(self._gantt_action)
 
+        # help menu
+        self._help_menu = QMenu("&Help", self)
+        self._menubar.addMenu(self._help_menu)
+
+        self._quick_start_action = QAction("Quick &Start")
+        self._quick_start_action.triggered.connect(self._quick_start)
+        self._quick_start_action.setShortcut("Ctrl+Shift+n")
+        self._help_menu.addAction(self._quick_start_action)
+
+        self._help_menu.addSeparator()
+
+        self._demo_action = QAction("&Demo")
+        self._demo_action.triggered.connect(self._demo)
+        self._demo_action.setShortcut("Ctrl+Shift+d")
+        self._help_menu.addAction(self._demo_action)
+
+        self._open_doc_action = QAction("&Documentation")
+        self._open_doc_action.triggered.connect(self._open_doc)
+        self._open_doc_action.setShortcut("Ctrl+Shift+h")
+        self._help_menu.addAction(self._open_doc_action)
+
         self.setGeometry(400, 100, 600, 600)
         self._new_file()
 
@@ -73,9 +95,19 @@ class MainWindow(QMainWindow):
         message_box.setText(str(e))
         return message_box.exec()
 
+    def _ask_erase_unsaved(self):
+        message_box = QMessageBox(self)
+        message_box.setIcon(QMessageBox.Icon.Warning)
+        message_box.setWindowTitle(self.TITLE)
+        message_box.setText("This operation will erase your unsaved work. Proceed?")
+        message_box.setStandardButtons(
+            QMessageBox.StandardButton.Yes | QMessageBox.StandardButton.No
+        )
+        return message_box.exec() == QMessageBox.StandardButton.Yes
+
     def _set_title(self, filepath: str):
         if not filepath:
-            self.setWindowTitle(f"[*] - {self.TITLE}")
+            self.setWindowTitle(f"untitled[*] - {self.TITLE}")
             return
         basename, _ = os.path.splitext(os.path.basename(filepath))
         self.setWindowTitle(f"{basename}[*] - {self.TITLE}")
@@ -83,7 +115,7 @@ class MainWindow(QMainWindow):
     def _new_file(self):
         self.editor.clear()
         self.setWindowModified(False)
-        self.setWindowTitle(self.TITLE)
+        self._set_title("")
 
     def _open_file(self, filepath: str):
         try:
@@ -118,6 +150,62 @@ class MainWindow(QMainWindow):
             os.startfile(filepath)
         except Exception as e:
             self._show_error(e)
+
+    def _quick_start(self):
+        if self.isWindowModified() and not self._ask_erase_unsaved():
+            return
+
+        lines = [
+            "title: ",
+            "state label: ",
+            "state: ",
+            "goals label: ",
+            "goals: ",
+            "",
+        ]
+        for _ in range(3):
+            lines.append("define class: <class_name> <todo_color> <done_color>")
+
+        lines.append("")
+
+        for _ in range(3):
+            lines.extend(
+                [
+                    "task: ",
+                    "date: ",
+                    "class: ",
+                    "progress: ",
+                    "id: ",
+                    "dependencies: ",
+                    "",
+                ]
+            )
+
+        self.editor.setPlainText("\n".join(lines))
+        self._file_ui.filepath = ""
+        self._set_title("")
+
+    def _demo(self):
+        if self.isWindowModified() and not self._ask_erase_unsaved():
+            return
+
+        with open("sample/sample2.txt", encoding="utf-8") as f:
+            text = f.read()
+
+        self.editor.clear()
+        for char in text:
+            self.editor.insertPlainText(char)
+            QApplication.processEvents()
+            self.editor.ensureCursorVisible()
+
+        self._file_ui.filepath = ""
+        self._set_title("")
+        self._gantt()
+
+    def _open_doc(self):
+        webbrowser.open_new_tab(
+            "https://github.com/gillshen/cfgantt/blob/main/README.md"
+        )
 
 
 if __name__ == "__main__":
