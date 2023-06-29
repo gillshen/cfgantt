@@ -4,6 +4,10 @@ state: YYYY-MM
 goals label: 申请目标
 goals: XXXXXX
 
+define class: s pink red
+define class: w #42a7f5 #085996
+define class: g #bbb #666
+
 task: GPA是重中之重需要守住
 date: 2023-04 2024-01
 class: s

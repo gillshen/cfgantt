@@ -20,11 +20,15 @@ class DateError(ParserError):
     pass
 
 
+def _today() -> str:
+    return str(datetime.date.today())
+
+
 @dataclasses.dataclass
 class Task:
     name: str
-    start: str
-    end: str
+    start: str = dataclasses.field(default_factory=_today)
+    end: str = dataclasses.field(default_factory=_today)
     custom_class: str = None
     id: str = None
     progress: int = 0
@@ -56,6 +60,8 @@ GOALS = _compile("goals")
 STATE_LABEL = _compile(r"state\s*label")
 GOALS_LABEL = _compile(r"goals\s*label")
 
+CLASS_STYLE = _compile(r"define\s*class")
+
 TASK = _compile("task")
 DATE = _compile("date")
 CLASS = _compile("class")
@@ -64,13 +70,14 @@ PROGRESS = _compile("progress")
 DEPENDENCIES = _compile("dependencies")
 
 
-def parse_file(filepath: str, encoding="utf-8") -> Plan:
+def parse_file(filepath: str, encoding="utf-8") -> tuple[Plan, list]:
     with open(filepath, encoding=encoding) as f:
         return parse(f.read())
 
 
-def parse(text: str) -> Plan:
+def parse(text: str) -> tuple[Plan, list]:
     plan = Plan()
+    class_styles = []
     data = None
 
     for line in text.splitlines():
@@ -90,6 +97,16 @@ def parse(text: str) -> Plan:
         elif goals_label := _extract(GOALS_LABEL, line):
             plan.goals_label = goals_label
 
+        elif class_style := _extract(CLASS_STYLE, line):
+            class_name, *colors = class_style.split()
+            if len(colors) == 1:
+                colors.append(colors[0])
+            elif not colors:
+                raise ParserError(f"No colors defined for class {class_name!r}")
+            elif len(colors) > 2:
+                raise ParserError(f"Too many colors defined for class {class_name!r}")
+            class_styles.append((class_name, colors))
+
         elif task_name := _extract(TASK, line):
             if data is not None:
                 plan.tasks.append(_create_task(data))
@@ -104,7 +121,9 @@ def parse(text: str) -> Plan:
             data["end"] = _parse_date(end, end=True)
 
         elif task_class := _extract(CLASS, line):
-            data["custom_class"] = _to_custom_class(task_class)
+            if re.search(r"\s", task_class):
+                raise ParserError(f"Invalid class name: {task_class!r}")
+            data["custom_class"] = task_class
         elif task_id := _extract(ID, line):
             data["id"] = task_id
 
@@ -122,7 +141,7 @@ def parse(text: str) -> Plan:
     if not plan.tasks:
         raise MissingDataError("No tasks to plot")
 
-    return plan
+    return plan, class_styles
 
 
 def _extract(pattern: re.Pattern, text: str) -> str | None:
@@ -133,8 +152,8 @@ def _extract(pattern: re.Pattern, text: str) -> str | None:
 def _create_task(data: dict) -> Task:
     try:
         return Task(**data)
-    except TypeError:
-        raise MissingDataError(data)
+    except TypeError as e:
+        raise MissingDataError(f"Incomplete data: {data}") from e
 
 
 def _parse_date(date_str: str, end=False) -> str:
@@ -143,7 +162,7 @@ def _parse_date(date_str: str, end=False) -> str:
         mo = re.match(r"^(\d{4})-(\d\d?)(?:-(\d\d?))?", date_str)
         yyyy, mm, dd = mo.groups()
     except AttributeError as e:
-        raise DateError(date_str) from e
+        raise DateError(f"Invalid date: {date_str!r}") from e
 
     year = int(yyyy)
     month = int(mm)
@@ -162,16 +181,6 @@ def _parse_date(date_str: str, end=False) -> str:
         raise DateError(date_str) from e
 
 
-def _to_custom_class(who: str) -> str:
-    if who == "s":
-        return "student"
-    if who == "w":
-        return "wenan"
-    if who == "g":
-        return "guwen"
-    raise ParserError(f'Invalid {who=!r}. Should be "s", "w", or "g".')
-
-
 ENVIRONMENT = jinja2.Environment(
     variable_start_string="/*",
     variable_end_string="*/",
@@ -180,7 +189,7 @@ ENVIRONMENT = jinja2.Environment(
 )
 
 
-def make_html(fp, plan: Plan):
+def make_html(fp, plan: Plan, class_styles: list = None):
     with open("assets/template.html", encoding="utf-8") as template_file:
         template_str = template_file.read()
     template = ENVIRONMENT.from_string(template_str)
@@ -193,6 +202,23 @@ def make_html(fp, plan: Plan):
 
     with open("assets/chart.css", encoding="utf-8") as css_file:
         css = css_file.read()
+
+    # update class styles
+    for class_name, (todo_color, done_color) in class_styles or []:
+        # .@class_name .bar {
+        #     fill: @todo_color !important;
+        # }
+        # .@class_name .bar-progress {
+        # fill: @done_color !important;
+        # }
+        css += (
+            f".{class_name} .bar {{"
+            f"    fill: {todo_color} !important;"
+            f"}}\n"
+            f".{class_name} .bar-progress {{"
+            f"    fill: {done_color} !important;"
+            f"}}\n"
+        )
 
     html = template.render(
         frappe_js=frappe_js, frappe_css=frappe_css, css=css, plan=plan.stringfy()

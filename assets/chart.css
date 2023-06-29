@@ -14,24 +14,24 @@
   margin-top: 1.2rem;
 }
 
-.student .bar {
+.s .bar {
   fill: var(--student-todo) !important;
 }
-.student .bar-progress {
+.s .bar-progress {
   fill: var(--student-done) !important;
 }
 
-.guwen .bar {
+.g .bar {
   fill: var(--guwen-todo) !important;
 }
-.guwen .bar-progress {
+.g .bar-progress {
   fill: var(--guwen-done) !important;
 }
 
-.wenan .bar {
+.w .bar {
   fill: var(--wenan-todo) !important;
 }
-.wenan .bar-progress {
+.w .bar-progress {
   fill: var(--wenan-done) !important;
 }
 

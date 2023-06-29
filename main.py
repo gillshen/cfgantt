@@ -69,7 +69,7 @@ class MainWindow(QMainWindow):
     def _show_error(self, e: Exception):
         message_box = QMessageBox(self)
         message_box.setIcon(QMessageBox.Icon.Critical)
-        message_box.setWindowTitle(self.TITLE)
+        message_box.setWindowTitle(e.__class__.__name__)
         message_box.setText(str(e))
         return message_box.exec()
 
@@ -113,7 +113,8 @@ class MainWindow(QMainWindow):
         filepath = "chart.html"
         try:
             with open(filepath, mode="w", encoding="utf-8") as f:
-                make_html(f, plan=parse(text))
+                plan, class_styles = parse(text)
+                make_html(f, plan=plan, class_styles=class_styles)
             os.startfile(filepath)
         except Exception as e:
             self._show_error(e)
