@@ -13,9 +13,23 @@
     <title>Gantt</title>
   </head>
   <body>
-    {% if logo %}
-    <div id="logo">/* logo */</div>
-    {% endif %} {% if plan.title or plan.state or plan.goals %}
+    <div id="annotation-area">
+      {% if logo %}
+      <div id="logo">/* logo */</div>
+      {% endif %} {% if class_styles %}
+      <div id="legend">
+        {% for (class_name, (todo_color, done_color)) in class_styles %}
+        <div>
+          <div class="/* class_name */ done-legend"></div>
+          <div class="/* class_name */ todo-legend"></div>
+          <div style="margin-left: 1rem">/* class_name */</div>
+        </div>
+        {% endfor %}
+      </div>
+      {% endif %}
+    </div>
+
+    {% if plan.title or plan.state or plan.goals %}
     <h1 id="title">/* plan.title */</h1>
 
     {% if plan.state or plan.goals %}

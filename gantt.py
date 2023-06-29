@@ -210,7 +210,13 @@ def make_html(fp, plan: Plan, class_styles: list = None):
         #     fill: @todo_color !important;
         # }
         # .@class_name .bar-progress {
-        # fill: @done_color !important;
+        #     fill: @done_color !important;
+        # }
+        # .@class_name .todo-legend {
+        #     background-color: @todo_color;
+        # }
+        # .@class_name .done-legend {
+        #     background-color: @done_color;
         # }
         css += (
             f".{class_name} .bar {{"
@@ -218,6 +224,12 @@ def make_html(fp, plan: Plan, class_styles: list = None):
             f"}}\n"
             f".{class_name} .bar-progress {{"
             f"    fill: {done_color} !important;"
+            f"}}\n"
+            f".{class_name}.todo-legend {{"
+            f"    background-color: {todo_color};"
+            f"}}\n"
+            f".{class_name}.done-legend {{"
+            f"    background-color: {done_color};"
             f"}}\n"
         )
 
@@ -233,6 +245,7 @@ def make_html(fp, plan: Plan, class_styles: list = None):
         css=css,
         plan=plan.stringfy(),
         logo=logo,
+        class_styles=class_styles,
     )
     fp.write(html)
 
